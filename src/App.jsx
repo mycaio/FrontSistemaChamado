@@ -1,7 +1,7 @@
-import ListarChamados from "./pages/chamados/ListarChamados";
+import CriarChamado from "./pages/chamados/CriarChamado";
 
 function App() {
-  return <ListarChamados />;
+  return <CriarChamado />;
 }
 
 export default App;
