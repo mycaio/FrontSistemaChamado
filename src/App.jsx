@@ -1,7 +1,7 @@
-import Dashboard from "./pages/Dashboard";
+import ListarChamados from "./pages/chamados/ListarChamados";
 
 function App() {
-  return <Dashboard />;
+  return <ListarChamados />;
 }
 
 export default App;
