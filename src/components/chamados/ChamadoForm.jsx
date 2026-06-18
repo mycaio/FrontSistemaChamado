@@ -1,60 +1,99 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-function ChamadoForm({ onSubmit }) {
-  const [titulo, setTitulo] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [prioridade, setPrioridade] = useState("BAIXA");
+function ChamadoForm({ chamado: chamadoProp, onSubmit }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const chamadoState = location.state?.chamado;
+  const inicial = chamadoProp || chamadoState || {};
 
-  function handleSubmit(e) {
+  const [form, setForm] = useState({
+    titulo: inicial.titulo || "",
+    descricao: inicial.descricao || "",
+    prioridade: inicial.prioridade || "",
+    status: inicial.status || "",
+  });
+
+  useEffect(() => {
+    // se prop mudar ou vier via location, atualiza o form
+    setForm({
+      titulo: inicial.titulo || "",
+      descricao: inicial.descricao || "",
+      prioridade: inicial.prioridade || "",
+      status: inicial.status || "",
+    });
+  }, [inicial.titulo, inicial.descricao, inicial.prioridade, inicial.status]);
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm((s) => ({ ...s, [name]: value }));
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-
-    const novoChamado = {
-      titulo,
-      descricao,
-      prioridade,
-    };
-
-    onSubmit(novoChamado);
-
-    setTitulo("");
-    setDescricao("");
-    setPrioridade("BAIXA");
+    if (onSubmit) {
+      await onSubmit(form);
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        type="text"
-        placeholder="Título"
-        value={titulo}
-        onChange={(e) => setTitulo(e.target.value)}
-        className="w-full border p-3 rounded"
-      />
+      <div>
+        <label className="block text-sm font-medium">Título</label>
+        <input
+          name="titulo"
+          value={form.titulo}
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        />
+      </div>
 
-      <textarea
-        placeholder="Descrição"
-        value={descricao}
-        onChange={(e) => setDescricao(e.target.value)}
-        className="w-full border p-3 rounded"
-      />
+      <div>
+        <label className="block text-sm font-medium">Descrição</label>
+        <textarea
+          name="descricao"
+          value={form.descricao}
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        />
+      </div>
 
-      <select
-        value={prioridade}
-        onChange={(e) => setPrioridade(e.target.value)}
-        className="w-full border p-3 rounded"
-      >
-        <option value="BAIXA">Baixa</option>
-        <option value="MEDIA">Média</option>
-        <option value="ALTA">Alta</option>
-        <option value="CRITICA">Crítica</option>
-      </select>
+      <div>
+        <label className="block text-sm font-medium">Prioridade</label>
+        <input
+          name="prioridade"
+          value={form.prioridade}
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        />
+      </div>
 
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Criar Chamado
-      </button>
+      <div>
+        <label className="block text-sm font-medium">Status</label>
+        <input
+          name="status"
+          value={form.status}
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        />
+      </div>
+
+      <div className="flex items-center">
+        <button
+          type="button"
+          onClick={() => navigate("/chamados")}
+          className="mr-2 bg-gray-300 px-3 py-1 rounded"
+        >
+          Voltar
+        </button>
+
+        <button
+          type="submit"
+          className="bg-green-600 text-white px-4 py-1 rounded"
+        >
+          Salvar
+        </button>
+      </div>
     </form>
   );
 }

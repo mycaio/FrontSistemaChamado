@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { listarChamados } from "../../services/chamadoService";
 import ChamadoTable from "../../components/chamados/ChamadoTable";
+import { listarChamados, deletarChamado } from "../../services/chamadoService";
 
 function ListarChamados() {
   const [chamados, setChamados] = useState([]);
@@ -18,11 +18,27 @@ function ListarChamados() {
     }
   }
 
+  async function handleDelete(id) {
+    const confirmar = window.confirm(
+      "Tem certeza que deseja excluir este chamado?",
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    try {
+      await deletarChamado(id);
+      carregarChamados();
+    } catch (error) {
+      console.error("Erro ao excluir chamado", error);
+    }
+  }
+
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">Lista de Chamados</h1>
-
-      <ChamadoTable chamados={chamados} />
+      <ChamadoTable chamados={chamados} onDelete={handleDelete} />
     </div>
   );
 }
