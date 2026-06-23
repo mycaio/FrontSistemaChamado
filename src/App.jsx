@@ -2,6 +2,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
 
+// Auth
+import Login from "./pages/auth/Login";
+import PrivateRoute from "./routes/PrivateRoute";
+
 // Dashboard
 import Dashboard from "./pages/Dashboard";
 
@@ -18,9 +22,20 @@ import EditarUsuario from "./pages/usuarios/EditarUsuario";
 function App() {
   return (
     <Routes>
+      {/* rota pública */}
+      <Route path="/login" element={<Login />} />
+
+      {/* redirecionamento inicial */}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-      <Route element={<MainLayout />}>
+      {/* rotas protegidas */}
+      <Route
+        element={
+          <PrivateRoute>
+            <MainLayout />
+          </PrivateRoute>
+        }
+      >
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/chamados" element={<ListarChamados />} />
