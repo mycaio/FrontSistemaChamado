@@ -1,0 +1,8 @@
+export const PRIORIDADES = ["BAIXA", "MEDIA", "ALTA", "CRITICA"];
+export const STATUS_CHAMADO = [
+  "ABERTO",
+  "EM_ANDAMENTO",
+  "RESOLVIDO",
+  "FECHADO",
+];
+export const PERFIS_USUARIO = ["ADMIN", "TECNICO", "SOLICITANTE"];

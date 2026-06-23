@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { PRIORIDADES, STATUS_CHAMADO } from "../../utils/enums";
 
 function ChamadoForm({ chamado: chamadoProp, onSubmit }) {
   const navigate = useNavigate();
@@ -36,6 +37,17 @@ function ChamadoForm({ chamado: chamadoProp, onSubmit }) {
     }
   }
 
+  function labelForPrioridade(p) {
+    if (p === "MEDIA") return "MÉDIA";
+    if (p === "CRITICA") return "CRÍTICA";
+    return p;
+  }
+
+  function labelForStatus(s) {
+    if (s === "EM_ANDAMENTO") return "EM ANDAMENTO";
+    return s;
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
@@ -60,22 +72,36 @@ function ChamadoForm({ chamado: chamadoProp, onSubmit }) {
 
       <div>
         <label className="block text-sm font-medium">Prioridade</label>
-        <input
+        <select
           name="prioridade"
           value={form.prioridade}
           onChange={handleChange}
           className="w-full border p-2 rounded"
-        />
+        >
+          <option value="">Selecione a prioridade</option>
+          {PRIORIDADES.map((p) => (
+            <option key={p} value={p}>
+              {labelForPrioridade(p)}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
         <label className="block text-sm font-medium">Status</label>
-        <input
+        <select
           name="status"
           value={form.status}
           onChange={handleChange}
           className="w-full border p-2 rounded"
-        />
+        >
+          <option value="">Selecione o status</option>
+          {STATUS_CHAMADO.map((s) => (
+            <option key={s} value={s}>
+              {labelForStatus(s)}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="flex items-center">
